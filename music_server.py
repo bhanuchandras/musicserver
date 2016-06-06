@@ -8,13 +8,15 @@ import subprocess
 
 class PlaySong:
 
-    def __init__(self,songtitle):
+    def __init__(self,songtitle,vol_index):
         if ("mp3" not in songtitle) and ("m4a" not in songtitle) and ("wav" not in songtitle):
             print "***",songtitle
             self.title = "/home/pi/music/105_kreeshte_sarvadikari.mp3"
             print "*** is changed to ",self.title
+	    self.volume_level = 100
         else:
             self.title = songtitle
+	    self.volume_level=int(vol_index)*100
 	self.process=None
 
 
@@ -22,7 +24,7 @@ class PlaySong:
 	self.stop()
         if os.name == 'posix':
             print os.name
-	    self.process = subprocess.Popen(["omxplayer", self.title])
+	    self.process = subprocess.Popen(["omxplayer","--vol",str(self.volume_level), self.title])
         else :
             print self.title
    
@@ -105,6 +107,7 @@ class fileUpload:
                 if "mp3" in file or "m4a" in file or "wav" in file : # or "m4a" in file or "wav" in file:
                     str+= """ <option value="{0}">{1}</option>""".format(os.path.join(r, file),os.path.join(file))
         str+="</select>"
+	str+= """<input type="range" name="points" min="-10" max="10">"""
         str+= """ <input type="submit"/>
                 </form> """
         return str
@@ -124,9 +127,10 @@ class fileUpload:
         for key in formFields.keys():
             params[ key ] = formFields[ key ].value
         fname = params[ 'droplist']
-
+	range_val = params[ 'points']
+	print range_val,"************************"
         print fname
-        ps = PlaySong(fname)
+        ps = PlaySong(fname,range_val)
         ps.play()
         return "playing song : <b>"+ fname+"</b>"
 
