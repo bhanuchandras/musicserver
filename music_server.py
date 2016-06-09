@@ -85,7 +85,7 @@ class fileUpload:
         str+="<th> Song List </th><th> action </th>"
         for r,d,f in os.walk(dir_list):
             for file in f:
-                if "mp3" in file or "m4a" in file: # or "m4a" in file or "wav" in file:
+                if "mp3" in file or "m4a" in file or "wav" in file:
                     str+= "<tr><td>{0}</td><td> play </td></tr>".format(os.path.join(r, file))
 
         str+="</table>"
