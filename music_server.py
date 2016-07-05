@@ -87,7 +87,7 @@ class fileUpload:
         for r,d,f in os.walk(dir_list):
             for file in f:
                 if "mp3" in file or "m4a" in file or "wav" in file:
-                    str+= "<tr><td>{0}</td><td> play </td></tr>".format(os.path.join(r, file))
+                    str+= '''<tr><td><input type="checkbox" name="checkbox" value="value"></td><td>{0}</td><td> play </td></tr>'''.format(os.path.join(r, file))
 
         str+="</table>"
         str = """ <style>
