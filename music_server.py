@@ -5,8 +5,6 @@ import tempfile
 import os
 import subprocess
 
-import platform
-
 class PlaySong:
 
     def __init__(self,songtitle,vol_index):
@@ -87,7 +85,7 @@ class fileUpload:
         for r,d,f in os.walk(dir_list):
             for file in f:
                 if "mp3" in file or "m4a" in file or "wav" in file:
-                    str+= '''<tr><td><input type="checkbox" name="checkbox" value="value"></td><td>{0}</td><td> play </td></tr>'''.format(os.path.join(r, file))
+                    str+= '''<tr><td><input type="checkbox" name="checkbox" value="{0}"></td><td>{1}</td></tr>'''.format(os.path.join(r, file),os.path.join(file))
 
         str+="</table>"
         str = """ <style>
@@ -139,7 +137,6 @@ class fileUpload:
     @cherrypy.tools.noBodyProcess()
     def upload(self, theFile=None):
         """upload action
-
         We use our variation of cgi.FieldStorage to parse the MIME
         encoded HTML form data containing the file."""
 
