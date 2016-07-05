@@ -80,14 +80,18 @@ class fileUpload:
         type must be multipart/form-data."""
         #dir_list="C:\\Users\\bhanu\\Music\\iTunes\\iTunes Media\\Music\\"
         dir_list=cherrypy.config.get("dir_list")
-        str="<table>"
-        str+="<th> Song List </th><th> action </th>"
+        str="<form action='playsonglist' method='post' enctype='multipart/form-data'>" 
+        str+="<table>"
+        str+="<th> check </th><th> Songs </th>"
         for r,d,f in os.walk(dir_list):
             for file in f:
                 if "mp3" in file or "m4a" in file or "wav" in file:
-                    str+= '''<tr><td><input type="checkbox" name="checkbox" value="{0}"></td><td>{1}</td></tr>'''.format(os.path.join(r, file),os.path.join(file))
+                    str+= '''<tr><td><input type="checkbox" name="songsplay[]" value="{0}"></td><td>{1}</td></tr>'''.format(os.path.join(r, file),os.path.join(file))
 
         str+="</table>"
+	str+= """<input type="range" name="points" min="-10" max="10">"""
+        str+= """ <input type="submit"/>
+                </form> """
         str = """ <style>
                     table, th, td {
                         border: 1px solid black;
@@ -132,6 +136,29 @@ class fileUpload:
         ps = PlaySong(fname,range_val)
         ps.play()
         return "playing song : <b>"+ fname+"</b>"
+
+    @cherrypy.expose
+    @cherrypy.tools.noBodyProcess()
+    def playsonglist(self, filename=None):
+        lcHDRS = {}
+        for key, val in cherrypy.request.headers.iteritems():
+            lcHDRS[key.lower()] = val
+       # print lcHDRS
+        formFields = myFieldStorage(fp=cherrypy.request.body,
+                                    headers=lcHDRS,
+                                    environ={'REQUEST_METHOD':'POST'},
+                                    keep_blank_values=True)
+        params = {}
+	print formFields.keys
+        #for key in formFields.keys():
+        #    params[ key ] = formFields[ key ].value
+        #fname = params[ 'songsplay']
+	#range_val = params[ 'points']
+	#print range_val,"************************"
+        #print fname
+        #ps = PlaySong(fname,range_val)
+        #ps.play()
+        #return "playing song : <b>"+ fname+"</b>"
 
     @cherrypy.expose
     @cherrypy.tools.noBodyProcess()
