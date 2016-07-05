@@ -5,6 +5,7 @@ import tempfile
 import os
 import subprocess
 
+import platform
 
 class PlaySong:
 
@@ -179,5 +180,6 @@ cherrypy.server.max_request_body_size = 0
 
 # increase server socket timeout to 60s; we are more tolerant of bad
 # quality client-server connections (cherrypy's defult is 10s)
-cherrypy.config.update('/home/pi/app.conf')
+#cherrypy.config.update('/home/pi/app.conf')
+cherrypy.config.update('./app.conf')
 cherrypy.quickstart(fileUpload())
