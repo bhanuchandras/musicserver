@@ -86,7 +86,7 @@ class fileUpload:
         for r,d,f in os.walk(dir_list):
             for file in f:
                 if "mp3" in file or "m4a" in file or "wav" in file:
-                    str+= '''<tr><td><input type="checkbox" name="songsplay[]" value="{0}"></td><td>{1}</td></tr>'''.format(os.path.join(r, file),os.path.join(file))
+                    str+= '''<tr><td><input type="checkbox" name="songsplay []" value="{0}"></td><td>{1}</td></tr>'''.format(os.path.join(r, file),os.path.join(file))
 
         str+="</table>"
 	str+= """<input type="range" name="points" min="-10" max="10">"""
@@ -148,9 +148,23 @@ class fileUpload:
                                     headers=lcHDRS,
                                     environ={'REQUEST_METHOD':'POST'},
                                     keep_blank_values=True)
-        params = {}
-	print formFields.keys
-        #for key in formFields.keys():
+	volume=0
+	song_list = []
+	#print formFields.keys
+        for key in formFields.keys():
+		#print key, formFields[ key ]
+		if key == 'points':
+			volume= formFields[ key ].value
+		if key == 'songsplay []':
+			#print  formFields[ key ]
+			print type(formFields[ key ])
+			if type(formFields[ key ]) is (list):
+			   for i in  formFields[ key ]:
+				print i.value
+				song_list.append(i.value)
+			else:
+				song_list.append(formFields[ key ].value)
+	print song_list,volume
         #    params[ key ] = formFields[ key ].value
         #fname = params[ 'songsplay']
 	#range_val = params[ 'points']
