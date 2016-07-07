@@ -7,26 +7,27 @@ import subprocess
 
 class PlaySong:
 
-    def __init__(self,songtitle,vol_index):
-        if ("mp3" not in songtitle) and ("m4a" not in songtitle) and ("wav" not in songtitle):
-            print "***",songtitle
-            self.title = "/home/pi/music/105_kreeshte_sarvadikari.mp3"
-            print "*** is changed to ",self.title
-	    self.volume_level = 100
-        else:
-            self.title = songtitle
-	    self.volume_level=int(vol_index)*100
+    def __init__(self):
 	self.process=None
 
 
-    def play(self):
+    def play(self,title,volume_level):
 	self.stop()
         if os.name == 'posix':
             print os.name
-	    self.process = subprocess.Popen(["omxplayer","--vol",str(self.volume_level), self.title])
+	    self.process = subprocess.Popen(["omxplayer","--vol",str(int(volume_level)*100), title])
         else :
-            print self.title
+            print title
    
+    def playlist(self,songlist,volume_level):
+	self.stop()
+        if os.name == 'posix':
+            print os.name
+	    for song in songlist:
+	          self.process = subprocess.Popen(["omxplayer","--vol",str(int(volume_level)*100), title])
+        else :
+	    for song in songlist:
+	          print song
     def stop(self):
 	if self.process != None:
 	  if self.process.poll() == True:
@@ -133,8 +134,8 @@ class fileUpload:
 	range_val = params[ 'points']
 	print range_val,"************************"
         print fname
-        ps = PlaySong(fname,range_val)
-        ps.play()
+        ps = PlaySong()
+        ps.play(fname,range_val)
         return "playing song : <b>"+ fname+"</b>"
 
     @cherrypy.expose
@@ -165,14 +166,9 @@ class fileUpload:
 			else:
 				song_list.append(formFields[ key ].value)
 	print song_list,volume
-        #    params[ key ] = formFields[ key ].value
-        #fname = params[ 'songsplay']
-	#range_val = params[ 'points']
-	#print range_val,"************************"
-        #print fname
-        #ps = PlaySong(fname,range_val)
-        #ps.play()
-        #return "playing song : <b>"+ fname+"</b>"
+        ps = PlaySong()
+        ps.playlist(song_list,volume)
+        return "playing song : "+str(song_list)
 
     @cherrypy.expose
     @cherrypy.tools.noBodyProcess()
